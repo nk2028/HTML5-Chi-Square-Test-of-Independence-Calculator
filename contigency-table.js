@@ -21,6 +21,15 @@ var _load_csv_to_ct_json = function (_csv) {
     
     var _lines = _csv.trim().split("\n");
     
+    // -----------------------------
+    // 偵測是否是ANOVA模式
+    if (_lines[0].trim().split(",").length === 2) {
+        _csv = _anova_data_to_contingency_table(_csv);
+        _lines = _csv.trim().split("\n");
+    }
+    
+    // ------------------------------
+    
     // x var
     var _x_vars = _lines[0].trim().split(",");
     var _var_x_list = [];
@@ -82,6 +91,68 @@ var _load_csv_to_ct_json = function (_csv) {
     }
     
     _draw_contingency_table_from_ct_json();
+};
+
+var _anova_data_to_contingency_table = function (_csv) {
+    console.log("ANOVA");
+    // 這樣要重新建立檔案，並且進行分割
+    
+    var _lines = _csv.trim().split("\n");
+
+    // 取得名稱
+    var _names = _lines[0].trim().split(",");
+
+    var _x_list = [];
+    var _y_list = [];
+
+    var _freq_count = {};
+    for (var _i = 1; _i < _lines.length; _i++) {
+        var _values = _lines[_i].trim().split(",");
+        var _x = _values[0].trim();
+        var _y = _values[1].trim();
+        if (typeof(_freq_count[_x]) === "undefined") {
+            _freq_count[_x] = {};
+        }
+        if (typeof(_freq_count[_x][_y]) === "undefined") {
+            _freq_count[_x][_y] = 0;
+        }
+        _freq_count[_x][_y]++;
+
+        if ($.inArray(_x, _x_list) === -1) {
+            _x_list.push(_x);
+        }
+        if ($.inArray(_y, _y_list) === -1) {
+            _y_list.push(_y);
+        }
+    }
+    
+    // 組合成新的csv
+    _csv = [];
+    var _line = [""];
+    for (var _i = 0; _i < _y_list.length; _i++) {
+        _line.push(_names[1] + ":" + _y_list[_i]);
+    }
+    _csv.push(_line.join(","));
+    
+    for (var _i = 0; _i < _x_list.length; _i++) {
+        var _x_name = _names[0] + ":" + _x_list[_i];
+        _line = [_x_name];
+        
+        for (var _j = 0; _j < _y_list.length; _j++) {
+            var _y = _y_list[_j];
+            var _x = _x_list[_i];
+            var _freq = 0;
+            if (typeof(_freq_count[_x]) !== "undefined" && typeof(_freq_count[_x][_y]) !== "undefined") {
+                _freq = _freq_count[_x][_y];
+            }
+            _line.push(_freq);
+        }
+        _csv.push(_line.join(","));
+    }
+    
+    _csv = _csv.join("\n");
+    
+    return _csv;
 };
 
 var _get_ct_json_from_ui = function () {
