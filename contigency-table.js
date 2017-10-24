@@ -94,7 +94,7 @@ var _load_csv_to_ct_json = function (_csv) {
 };
 
 var _anova_data_to_contingency_table = function (_csv) {
-    console.log("ANOVA");
+    //console.log("ANOVA");
     // 這樣要重新建立檔案，並且進行分割
     
     var _lines = _csv.trim().split("\n");
@@ -253,6 +253,9 @@ $(function () {
     $('.contingency-table-row-plus button.download-csv-anova-encoded').click(function () {
         _download_csv(true);
     });
+    $('.contingency-table-row-plus button.download-csv-friedman-test').click(function () {
+        _download_csv_friedman_test();
+    });
 });
 
 var _download_csv_contingency_table = function () {
@@ -380,6 +383,134 @@ var _add_ct_json_attr = function (_dimension) {
     
     _draw_contingency_table_from_ct_json();
 };
+
+
+var _download_csv_friedman_test = function (_dimension) {
+    if (typeof(_dimension) === "undefined") {
+        _dimension = "x";
+    }
+
+    var _output = [];
+    
+    // -------------------------
+    
+    var _attr_list = _get_attr(_dimension);
+    var _line = [];
+    for (var _i = 0; _i < _attr_list.length; _i++) {
+        var _attr = _attr_list[_i];
+        if (isNaN(_attr) === false) {
+            _attr = "var_" + _attr;
+        }
+        _line.push(_attr);
+    }
+    _output.push(_line.join(","));
+    
+    
+    // -------------------------
+    
+    var _json = _get_ct_json_from_ui();
+    
+    var _total = 0;
+    for (var _x in _json) {
+        for (var _y in _json[_x]) {
+            var _freq = _json[_x][_y];
+            _total = _total + _freq;
+        }
+    }
+    
+    var _x_attr = _get_attr("x");
+    var _y_attr = _get_attr("y");
+    
+    while (true) {
+        var _min_x_list = [];
+        var _min_y_list = [];
+        var _min_freq_list = [];
+    
+        // 先找出行列中最小的值
+        for (var _i = 0; _i < _attr_list.length; _i++) {
+            var _min_x = null;
+            var _min_y = null;
+            var _min_freq = null;
+
+            var _x_count = 0;
+            for (var _x in _json) {
+                _x_count++;
+                if ($.inArray(_x, _min_x_list) > -1) {
+                    continue;
+                }
+
+                var _y_count = 0;
+                for (var _y in _json[_x]) {
+                    _y_count++;
+                    if ($.inArray(_y, _min_y_list) > -1) {
+                        continue;
+                    }
+
+                    var _freq = _json[_x][_y];
+                    if (_min_freq === null || (_freq < _min_freq && _freq !== 0)) {
+                        _min_freq = _freq;
+                        _min_x = _x;
+                        _min_y = _y;
+                    }
+                }
+            }
+            
+            _min_x_list.push(_min_x);
+            _min_y_list.push(_min_y);
+            _min_freq_list.push(_min_freq);
+            //console.log([_min_x, _min_y, _min_freq]);
+        }   // for (var _i = 0; _i < _attr_list.length; _i++) {
+        
+        //console.log([_min_x_list, _min_y_list, _min_freq_list]);
+        var _freq = _min_freq_list[0];
+        var _row = {};
+        for (var _i = 0; _i < _attr_list.length; _i++) {
+            _row[_attr_list[_i]] = 0;
+        }
+        if (_dimension === "x") {
+            for (var _i = 0; _i < _min_x_list.length; _i++) {
+                var _x = _min_x_list[_i];
+                var _y = _min_y_list[_i];
+                _row[_x] = _y;
+                _json[_x][_y] = _json[_x][_y] - _freq;
+            }
+            var _line = [];
+            for (var _i = 0; _i < _attr_list.length; _i++) {
+                _line.push(_row[_attr_list[_i]]);
+            }
+            _line = _line.join(",");
+            for (var _i = 0; _i < _freq; _i++) {
+                _output.push(_line);
+            }
+        }
+        
+        //console.log([_output.length, _total]);
+        if (_output.length > (_total/_attr_list.length))  {
+            break;
+        }
+    }
+        
+    //console.log(_output.join("\n"));
+    //return ;
+        
+    
+    
+    
+    // -------------------------
+    
+    _output = _output.join("\n");
+    //console.log(_output);
+    var d = new Date();
+    var utc = d.getTime() - (d.getTimezoneOffset() * 60000);
+  
+    var local = new Date(utc);
+    var _time = local.toJSON().slice(0,19).replace(/:/g, "-");
+    var _filename = $("#variable_y_name").val().trim() + "_" + $("#variable_x_name").val().trim() + "-" + _time + ".csv";
+    
+    _download_file(_output, _filename, "csv");
+};
+
+// ------------------------------
 
 var _count_attr = function (_dimension) {
     var _count = 0;
