@@ -424,6 +424,11 @@ var _download_csv_friedman_test = function (_dimension) {
     var _x_attr = _get_attr("x");
     var _y_attr = _get_attr("y");
     
+    var _zero_x_list = [];
+    var _zero_y_list = [];
+    //var _error_combination = [];
+    var _skip_count = 0;
+    
     while (true) {
         var _min_x_list = [];
         var _min_y_list = [];
@@ -435,37 +440,64 @@ var _download_csv_friedman_test = function (_dimension) {
             var _min_y = null;
             var _min_freq = null;
 
-            var _x_count = 0;
-            for (var _x in _json) {
-                _x_count++;
+
+            for (var _x_count = 0; _x_count < _x_attr.length; _x_count++) {
+                var _x = _x_attr[_x_count];
                 if ($.inArray(_x, _min_x_list) > -1) {
                     continue;
                 }
 
                 var _y_count = 0;
-                for (var _y in _json[_x]) {
-                    _y_count++;
+                for (var _y_count = 0; _y_count < _y_attr.length;_y_count++) {
+                    var _y = _y_attr[_y_count];
                     if ($.inArray(_y, _min_y_list) > -1) {
                         continue;
                     }
+                    //else if (_min_freq_list.length === 0 
+                    //        && _zero_x_list.length !== 3
+                    //        && ($.inArray(_x, _zero_x_list) > -1 || $.inArray(_y, _zero_y_list) > -1)) {
+                    //    continue;
+                    //}
 
                     var _freq = _json[_x][_y];
-                    if (_min_freq === null || (_freq < _min_freq && _freq !== 0)) {
-                        _min_freq = _freq;
-                        _min_x = _x;
-                        _min_y = _y;
+                    if ((_min_freq === null && _freq !== 0) || (_freq > _min_freq && _freq !== 0)) {
+                        if (_skip_count > 0) {
+                            _skip_count--;
+                        }
+                        else {
+                            _min_freq = _freq;
+                            _min_x = _x;
+                            _min_y = _y;
+                        }
                     }
                 }
             }
             
-            _min_x_list.push(_min_x);
-            _min_y_list.push(_min_y);
-            _min_freq_list.push(_min_freq);
-            //console.log([_min_x, _min_y, _min_freq]);
+            if (_min_freq === null) {
+                console.log("找不到合適的方案");
+                console.log([_min_x, _min_y, _min_freq]);
+                _i = 0;
+                _min_x_list = [];
+                _min_y_list = [];
+                _min_freq_list = [];
+                _skip_count++;
+            }
+            else {
+                _min_x_list.push(_min_x);
+                _min_y_list.push(_min_y);
+                _min_freq_list.push(_min_freq);
+                console.log([_min_x, _min_y, _min_freq]);
+            }
         }   // for (var _i = 0; _i < _attr_list.length; _i++) {
-        
+                
         //console.log([_min_x_list, _min_y_list, _min_freq_list]);
-        var _freq = _min_freq_list[0];
+        //var _freq = _min_freq_list[0];
+        //for (var _i = 1; _i < _min_freq_list.length; _i++) {
+        //    if (_min_freq_list[_i] < _freq) {
+        //        _freq = _min_freq_list[_i];
+        //    }
+        //}
+        var _freq = 1;
         var _row = {};
         for (var _i = 0; _i < _attr_list.length; _i++) {
             _row[_attr_list[_i]] = 0;
@@ -477,7 +509,13 @@ var _download_csv_friedman_test = function (_dimension) {
                 var _x = _min_x_list[_i];
                 var _y = _min_y_list[_i];
                 _row[_x] = _y;
-                _json[_x][_y] = _json[_x][_y] - _freq;
+                _json[_x][_y] = _json[_x][_y] - 1;
+                
+                if (_json[_x][_y] === 0) {
+                    _zero_x_list.push(_x);
+                    _zero_y_list.push(_y);
+                }
+                
             }
             for (var _i = 0; _i < _attr_list.length; _i++) {
                 _line.push(_row[_attr_list[_i]]);
@@ -488,7 +526,7 @@ var _download_csv_friedman_test = function (_dimension) {
                 var _x = _min_x_list[_i];
                 var _y = _min_y_list[_i];
                 _row[_y] = _x;
-                _json[_x][_y] = _json[_x][_y] - _freq;
+                _json[_x][_y] = _json[_x][_y] - 1;
             }
             for (var _i = 0; _i < _attr_list.length; _i++) {
                 _line.push(_row[_attr_list[_i]]);
@@ -500,6 +538,8 @@ var _download_csv_friedman_test = function (_dimension) {
         }
         
         //console.log([_output.length, _total]);
+        //console.log(_line);
+        //break;
         if (_output.length > (_total/_attr_list.length))  {
             break;
         }
