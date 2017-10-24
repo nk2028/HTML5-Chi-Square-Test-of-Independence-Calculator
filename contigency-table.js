@@ -241,10 +241,125 @@ $(function () {
     $('.contingency-table-col-plus button').click(function () {
         _add_ct_json_attr('x');
     });
-    $('.contingency-table-row-plus button').click(function () {
+    $('.contingency-table-row-plus button.add-row').click(function () {
         _add_ct_json_attr('y');
     });
+    $('.contingency-table-row-plus button.download-csv-contingency-table').click(function () {
+        _download_csv_contingency_table();
+    });
+    $('.contingency-table-row-plus button.download-csv-anova-raw').click(function () {
+        _download_csv(false);
+    });
+    $('.contingency-table-row-plus button.download-csv-anova-encoded').click(function () {
+        _download_csv(true);
+    });
 });
+
+var _download_csv_contingency_table = function () {
+    var _output = [];
+    
+    // --------------------------
+    
+    var _y_name = $("#variable_y_name").val().trim();
+    var _y_attr_list = _get_attr("y");
+    var _x_name = $("#variable_x_name").val().trim();
+    var _x_attr_list = _get_attr("x");
+    
+    // -----------------
+    
+    var _line = [""];
+    for (var _i = 0; _i < _x_attr_list.length; _i++) {
+        _line.push(_x_name + ":" + _x_attr_list[_i]);
+    }
+    _output.push(_line.join(","));
+    
+    // -----------------
+    
+    var _json = _get_ct_json_from_ui();
+    
+    var _rows = {};
+    for (var _x in _json) {
+        for (var _y in _json[_x]) {
+            var _freq = _json[_x][_y];
+            if (typeof(_rows[_y]) === "undefined") {
+                _rows[_y] = [_y_name + ":" + _y];
+            }
+            _rows[_y].push(_freq);
+        }
+    }
+    
+    for (var _r in _rows) {
+        _output.push(_rows[_r].join(","));
+    }
+    
+    
+    // --------------------------
+    
+    _output = _output.join("\n");
+    //console.log(_output);
+    var d = new Date();
+    var utc = d.getTime() - (d.getTimezoneOffset() * 60000);
+  
+    var local = new Date(utc);
+    var _time = local.toJSON().slice(0,19).replace(/:/g, "-");
+    var _filename = $("#variable_y_name").val().trim() + "_" + $("#variable_x_name").val().trim() + "-" + _time + ".csv";
+    
+    _download_file(_output, _filename, "csv");
+};
+
+var _download_csv = function (_encoded) {
+    if (typeof(_encoded) === "undefined") {
+        _encoded = false;
+    }
+    
+    var _output = [];
+    
+    // -------------------------
+    
+    var _y_name = "var_x";
+    var _x_name = "var_y";
+    
+    if (_encoded === false) {
+        _y_name = $("#variable_y_name").val().trim();
+        _x_name = $("#variable_x_name").val().trim();
+    }
+    
+    _output.push([_y_name, _x_name].join(","));
+    // -------------------------
+    
+    var _json = _get_ct_json_from_ui();
+    
+    var _x_count = 1;
+    for (var _x in _json) {
+        var _y_count = 1;
+        for (var _y in _json[_x]) {
+            var _freq = _json[_x][_y];
+            for (var _i = 0; _i < _freq; _i++) {
+                if (_encoded === true) {
+                    _output.push([_y_count, _x_count].join(","));
+                }
+                else {
+                    _output.push([_y, _x].join(","));
+                }
+            }
+            _y_count++;
+        }
+        _x_count++;
+    }
+    
+    // -------------------------
+    
+    _output = _output.join("\n");
+    //console.log(_output);
+    var d = new Date();
+    var utc = d.getTime() - (d.getTimezoneOffset() * 60000);
+  
+    var local = new Date(utc);
+    var _time = local.toJSON().slice(0,19).replace(/:/g, "-");
+    var _filename = $("#variable_y_name").val().trim() + "_" + $("#variable_x_name").val().trim() + "-" + _time + ".csv";
+    
+    _download_file(_output, _filename, "csv");
+};
 
 var _add_ct_json_attr = function (_dimension) {
     _ct_json = _get_ct_json_from_ui();
