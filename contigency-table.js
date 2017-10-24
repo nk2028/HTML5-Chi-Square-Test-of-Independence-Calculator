@@ -253,8 +253,11 @@ $(function () {
     $('.contingency-table-row-plus button.download-csv-anova-encoded').click(function () {
         _download_csv(true);
     });
-    $('.contingency-table-row-plus button.download-csv-friedman-test').click(function () {
-        _download_csv_friedman_test();
+    $('.contingency-table-row-plus button.download-csv-friedman-test-y').click(function () {
+        _download_csv_friedman_test("y");
+    });
+    $('.contingency-table-row-plus button.download-csv-friedman-test-x').click(function () {
+        _download_csv_friedman_test("x");
     });
 });
 
@@ -467,6 +470,8 @@ var _download_csv_friedman_test = function (_dimension) {
         for (var _i = 0; _i < _attr_list.length; _i++) {
             _row[_attr_list[_i]] = 0;
         }
+        
+        var _line = [];
         if (_dimension === "x") {
             for (var _i = 0; _i < _min_x_list.length; _i++) {
                 var _x = _min_x_list[_i];
@@ -474,14 +479,24 @@ var _download_csv_friedman_test = function (_dimension) {
                 _row[_x] = _y;
                 _json[_x][_y] = _json[_x][_y] - _freq;
             }
-            var _line = [];
             for (var _i = 0; _i < _attr_list.length; _i++) {
                 _line.push(_row[_attr_list[_i]]);
             }
-            _line = _line.join(",");
-            for (var _i = 0; _i < _freq; _i++) {
-                _output.push(_line);
+        }
+        else {
+            for (var _i = 0; _i < _min_y_list.length; _i++) {
+                var _x = _min_x_list[_i];
+                var _y = _min_y_list[_i];
+                _row[_y] = _x;
+                _json[_x][_y] = _json[_x][_y] - _freq;
             }
+            for (var _i = 0; _i < _attr_list.length; _i++) {
+                _line.push(_row[_attr_list[_i]]);
+            }
+        }
+        _line = _line.join(",");
+        for (var _i = 0; _i < _freq; _i++) {
+            _output.push(_line);
         }
         
         //console.log([_output.length, _total]);
@@ -499,7 +514,7 @@ var _download_csv_friedman_test = function (_dimension) {
     // -------------------------
     
     _output = _output.join("\n");
-    //console.log(_output);
+    
     var d = new Date();
     var utc = d.getTime() - (d.getTimezoneOffset() * 60000);
   
@@ -507,6 +522,7 @@ var _download_csv_friedman_test = function (_dimension) {
     var _time = local.toJSON().slice(0,19).replace(/:/g, "-");
     var _filename = $("#variable_y_name").val().trim() + "_" + $("#variable_x_name").val().trim() + "-" + _time + ".csv";
     
+    //console.log(_output);
     _download_file(_output, _filename, "csv");
 };
 
