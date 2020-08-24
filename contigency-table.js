@@ -19,6 +19,10 @@ var _load_csv_to_ct_json = function (_csv) {
     
     // ,性別:男性,性別:女性\n錄取結果:通過,35,20\n錄取結果:不通過,45,40
     
+    if (_csv.indexOf('\t') > -1) {
+      _csv = _csv.split('\t').join(',')
+    }
+    
     var _lines = _csv.trim().split("\n");
     
     // -----------------------------
