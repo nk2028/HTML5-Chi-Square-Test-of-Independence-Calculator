@@ -726,7 +726,7 @@ var _draw_result_table = function () {
     var _panel = $(".file-process-framework");
     var _result = _panel.find("#preview_html");
     
-    var _cross_table = $('<div class="cross-table"><table border="1" cellpadding="0" cellspacing="0">'
+    var _cross_table = $('<div class="cross-table">交叉表<table border="1" cellpadding="0" cellspacing="0">'
         + '<thead>'
             + '<tr class="x-var-tr"><th colspan="3" rowspan="2"></th><th class="x-var-name"></th><th rowspan="2" valign="bottom">' + '列總合' + '</th></tr>'
             + '<tr class="x-vars-tr"></tr></thead>'
