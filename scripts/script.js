@@ -1,4 +1,6 @@
 
+/* global _draw_result_table */
+
 var _combine_input = function () {
     // 開頭設定
     _reset_result();
@@ -290,7 +292,10 @@ $(function () {
 
     //$('.menu .item').tab();
     
-    _load_data_from_filepath("#input_data", "data.csv", _combine_input);
+    initSettingFromPersisten()
+    if (initDataFromPersisten() === false) {
+      _load_data_from_filepath("#input_data", "data.csv", _combine_input);
+    }
 
 
     $('#copy_source_code').click(function () {

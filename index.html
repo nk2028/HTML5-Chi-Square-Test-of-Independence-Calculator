@@ -6,7 +6,7 @@
         </title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="manifest" href="/manifest.json" />
+        <link rel="manifest" href="manifest.json" />
         
 <link rel="icon" type="image/png" href="icon.png" />
 <link rel="stylesheet" href="styles/style.css" />
@@ -26,6 +26,8 @@
 <script src="vendors/jquery-ui/jquery-ui.js"></script>
 <script src="scripts/contigency-table.js"></script>
 <script src="scripts/script.js"></script>
+
+<script src="scripts/data-persist-helper.js"></script>
 
 <script src='https://code.responsivevoice.org/responsivevoice.js'></script>
 
@@ -219,7 +221,19 @@
 </h1> 
     <div class="field">
         <div class="ui checkbox">
-            <input type="checkbox" class="change-trigger-draw" 
+            <input type="checkbox" 
+                   class="change-trigger-draw data-persist-setting" 
+                   name="remove_zero_row"
+                   id="remove_zero_row" 
+                   checked="checked"
+                   value="remove_zero_row"  />
+            <label for="remove_zero_row">移除沒有數值的列。</label>
+        </div>
+    </div>
+    <div class="field">
+        <div class="ui checkbox">
+            <input type="checkbox" 
+                   class="change-trigger-draw data-persist-setting" 
                    name="input_display_percent"
                    id="input_display_percent" 
                    value="input_display_percent"  />
@@ -228,7 +242,8 @@
     </div>
     <div class="field">
         <div class="ui checkbox">
-            <input type="checkbox" class="change-trigger-draw" 
+            <input type="checkbox" 
+                   class="change-trigger-draw data-persist-setting" 
                    name="input_enable_fisher"
                    id="input_enable_fisher" 
                    value="input_enable_fisher" checked="checked"  />
@@ -237,7 +252,8 @@
     </div>
     <div class="field">
         <div class="ui checkbox">
-            <input type="checkbox" class="change-trigger-draw" 
+            <input type="checkbox" 
+                   class="change-trigger-draw data-persist-setting" 
                    name="input_enable_yates"
                    id="input_enable_yates" 
                    value="input_enable_yates" checked="checked"  />
@@ -246,7 +262,8 @@
     </div>
     <div class="field">
         <div class="ui checkbox">
-            <input type="checkbox" class="change-trigger-draw" 
+            <input type="checkbox" 
+                   class="change-trigger-draw data-persist-setting" 
                    name="input_table_style_display"
                    id="input_table_style_display" 
                    value="input_table_style_display"  />

@@ -23,6 +23,8 @@ var _load_csv_to_ct_json = function (_csv) {
       _csv = _csv.split('\t').join(',')
     }
     
+    setDataToPersisten(_csv)
+    
     var _lines = _csv.trim().split("\n");
     
     // -----------------------------
@@ -92,6 +94,30 @@ var _load_csv_to_ct_json = function (_csv) {
             }
             _ct_json[_x_name][_y_name] = _cell;
         }
+    }
+    
+    if ($('#remove_zero_row').prop('checked')) {
+      //console.log(_ct_json)
+      //console.log(_var_y_list)
+      
+      _var_y_list.forEach(varY => {
+        let isEmpty = true
+        for (let i = 0; i < _var_x_list.length; i++) {
+          let varX = _var_x_list[i]
+          if (_ct_json[varX][varY] > 0) {
+            isEmpty = false
+            break
+          }
+        }
+        
+        if (isEmpty === true) {
+          //console.log('delete', varY)
+          for (let i = 0; i < _var_x_list.length; i++) {
+            let varX = _var_x_list[i]
+            delete _ct_json[varX][varY]
+          }
+        }
+      })
     }
     
     _draw_contingency_table_from_ct_json();
@@ -211,6 +237,32 @@ var _get_ct_json_from_ui = function () {
             _ct_json[_x_attr][_y_attr] = _cell_value;
         });
     });
+    
+    if ($('#remove_zero_row').prop('checked')) {
+      //console.log(_ct_json)
+      //console.log(_var_y_list)
+      
+      _var_y_list.forEach(varY => {
+        let isEmpty = true
+        for (let i = 0; i < _var_x_list.length; i++) {
+          let varX = _var_x_list[i]
+          if (_ct_json[varX][varY] > 0) {
+            isEmpty = false
+            break
+          }
+        }
+        
+        if (isEmpty === true) {
+          //console.log('delete', varY)
+          for (let i = 0; i < _var_x_list.length; i++) {
+            let varX = _var_x_list[i]
+            delete _ct_json[varX][varY]
+          }
+        }
+      })
+    }
+    
+    //console.log(_ct_json)
     
     return _ct_json;
 };
@@ -718,6 +770,8 @@ var _y_var_count;
 var _draw_result_table = function () {
     _ct_json = _get_ct_json_from_ui();
     _reset_result();
+    
+    setSettingToPersisten()
     
     //var _n = 0.07215074898001728;
     //console.log([precision_string(_n, 3), _n]);
