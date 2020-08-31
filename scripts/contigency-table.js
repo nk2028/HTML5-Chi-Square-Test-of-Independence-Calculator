@@ -1032,6 +1032,8 @@ var _draw_num_cell = function () {
     _draw_x_percent_cell();
     _draw_y_percent_cell();
     _draw_cell_percent_cell();
+    
+    drawPlainTable(_cross_table)
 };
 
 _x_per_list = {};
