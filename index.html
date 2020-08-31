@@ -1,9 +1,4 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
     <head>
         <title>
@@ -11,22 +6,26 @@ and open the template in the editor.
         </title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link rel="stylesheet" href="style.css" />
+        <link rel="manifest" href="/manifest.json" />
         
-<link rel="stylesheet" href="//pulipulichen.github.io/blogger/posts/2016/12/semantic/semantic.min.css" />
-<link rel="stylesheet" href="http://fontawesome.io/assets/font-awesome/css/font-awesome.css" />
+<link rel="icon" type="image/png" href="icon.png" />
+<link rel="stylesheet" href="styles/style.css" />
+        
+<link rel="stylesheet" href="vendors/semantic-ui/semantic.min.css" />
+
+<!-- <link rel="stylesheet" href="http://fontawesome.io/assets/font-awesome/css/font-awesome.css" /> -->
+
     </head>
     <body>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-<script src="//pulipulichen.github.io/blogger/posts/2016/12/semantic/semantic.min.js"></script>
-<script src="http://pulipulichen.github.io/blogger/posts/2016/12/puli-util.clipboard.js"></script>
+<script src="vendors/jquery/jquery.min.js"></script>
+<script src="vendors/semantic-ui/semantic.min.js"></script>
+<script src="vendors/puli-util.clipboard.js"></script>
 <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 
-<script src="statistics-distributions.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script src="contigency-table.js"></script>
-<script src="script.js"></script>
+<script src="scripts/statistics-distributions.js"></script>
+<script src="vendors/jquery-ui/jquery-ui.js"></script>
+<script src="scripts/contigency-table.js"></script>
+<script src="scripts/script.js"></script>
 
 <script src='https://code.responsivevoice.org/responsivevoice.js'></script>
 
@@ -44,7 +43,7 @@ and open the template in the editor.
 </h1>
 
 
-<!-- --------------------------------- -->
+<!-- ============================================= -->
 
 <div class="ui bottom attached active tab segment input-field-container">
     
@@ -98,7 +97,7 @@ and open the template in the editor.
     
 </div>
 
-<!-- -------------------------------------- -->
+<!-- ============================= -->
 
 		</div> <!-- <div class="ui segment"> -->
                 
@@ -258,7 +257,7 @@ and open the template in the editor.
         
         
 	</div> <!-- <div class="column"> -->
-  <!-- -------------------------------------- -->
+  <!-- =============================== -->
     <div class="column">
   <div class="ui segment display-result" style="">
   <!-- <div class="display-result"> -->
@@ -281,7 +280,7 @@ and open the template in the editor.
     <div class="field">
       <label for="preview">
         <button type="button" id="copy_source_code" class="hide">Copy Source Code</button>
-        <div class="ui  pointing below  medium blue basic label encoding" style="margin-left: 1em; display: none;">
+        <div class="ui pointing below  medium blue basic label encoding" style="margin-left: 1em; display: none;">
           Get error encoding text? <a href="http://blog.pulipuli.info/2016/12/utf-8notepad-how-to-convert-plain-text.html" target="notepad" >Try to Convert TXT file to UTF8 encoding?</a>
         </div>
       </label>

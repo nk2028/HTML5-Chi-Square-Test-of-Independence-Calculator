@@ -1,0 +1,17 @@
+{
+  "short_name": "卡方獨立分析器",
+  "name": "卡方獨立性檢定計算器 Chi-squared test Calculator",
+  "description": "卡方獨立性檢定計算器 Chi-squared test Calculator",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "type": "image/png",
+      "sizes": "300x300"
+    }
+  ],
+  "start_url": "/index.html",
+  "background_color": "#3367D6",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#1ABC9C"
+}

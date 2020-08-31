@@ -5,3 +5,6 @@ An HTML5 widget for Chi-Square Test of Independence.
 https://pulipulichen.github.io/HTML5-Chi-Square-Test-of-Independence-Calculator/
 
 https://github.com/pulipulichen/HTML5-Chi-Square-Test-of-Independence-Calculator
+
+ICON
+https://marketplace.brainwavegrc.com/package/bw_crosstab_docs/
