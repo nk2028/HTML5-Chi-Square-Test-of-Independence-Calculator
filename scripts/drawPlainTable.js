@@ -38,7 +38,7 @@ let drawPlainTable = function (_cross_table) {
   
   // ----------------------------------
   
-  let outputTable = $(`<div class="cross-table">
+  let outputTable = $(`<div class="cross-table analyze-result">
     交叉表
   <button type="button" class="copy-table ui button mini">複製表格</button>
   <table border="1" cellpadding="0" cellspacing="0">

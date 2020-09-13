@@ -96,10 +96,10 @@ var _load_csv_to_ct_json = function (_csv) {
         }
     }
     
-    if ($('#remove_zero_row').prop('checked')) {
+    /*
+    if ($('#zero_adjust_row').prop('checked')) {
       //console.log(_ct_json)
       //console.log(_var_y_list)
-      
       _var_y_list.forEach(varY => {
         let isEmpty = true
         for (let i = 0; i < _var_x_list.length; i++) {
@@ -118,7 +118,36 @@ var _load_csv_to_ct_json = function (_csv) {
           }
         }
       })
+     
+      let hasEmptyRow = true
+      for (let i = 0; i < _var_y_list.length; i++) {
+        let varY = _var_y_list[i]
+        let isEmpty = true
+        for (let i = 0; i < _var_x_list.length; i++) {
+          let varX = _var_x_list[i]
+          if (_ct_json[varX][varY] > 0) {
+            isEmpty = false
+            break
+          }
+        }
+        
+        if (isEmpty === true) {
+          hasEmptyRow = true
+          break
+        }
+      }
+      
+      if (hasEmptyRow === true) {
+        for (let i = 0; i < _var_y_list.length; i++) {
+          let varY = _var_y_list[i]
+          for (let i = 0; i < _var_x_list.length; i++) {
+            let varX = _var_x_list[i]
+            _ct_json[varX][varY] = _ct_json[varX][varY] + 0.5
+          }
+        }
+      }
     }
+  */
     
     _draw_contingency_table_from_ct_json();
 };
