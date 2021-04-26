@@ -23,6 +23,7 @@ var _get_fix_precision = function (_number) {
 
 // -----------------------------------------------------
 
+/*
 tinyMCE.init({
 	mode : "specific_textareas",
 	editor_selector : "mceEditor",
@@ -42,6 +43,7 @@ tinyMCE.init({
 	   });
     }
 });
+*/
 
 var _reset_result = function () {
     
